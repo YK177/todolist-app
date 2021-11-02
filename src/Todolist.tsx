@@ -1,7 +1,8 @@
-import React, {KeyboardEvent, ChangeEvent, useState} from "react";
-import {FilterValueType, TaskType} from "./App";
+import React, {ChangeEvent} from 'react';
+import {FilterValueType, TaskType} from './App';
+import {AddItemForm} from './AddItemForm';
 
-type PropsType = {
+type TodolistPropsType = {
     id: string
     title: string
     tasks: TaskType[]
@@ -12,10 +13,7 @@ type PropsType = {
     deleteTodolist: (todolistID: string) => void
 }
 
-export const Todolist = (props: PropsType) => {
-
-    const [newTitle, setNewTitle] = useState('')
-    const [error, setError] = useState('')
+export const Todolist = (props: TodolistPropsType) => {
 
     const mappedTasks = props.tasks.map(task => {
         const onClickHandler = () => props.deleteTask(props.id, task.id)
@@ -31,34 +29,14 @@ export const Todolist = (props: PropsType) => {
         )
     })
 
-    //tasks handlers
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setNewTitle(e.currentTarget.value)
-        setError('')
-    }
-
-    const addTask = () => {
-        if (newTitle === '') {
-            setError('Field is required!')
-        } else {
-            props.addTask(props.id, newTitle.trim())
-        }
-        setNewTitle('')
-    }
-
-    const onClickHandlerForAddTask = () => {
-        addTask()
-    }
-
-    const onEnterPressHandlerForAddTask = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') addTask()
+    const callbackForAddTask = (newTitle: string) => {
+        props.addTask(props.id, newTitle)
     }
 
     const changeFilterHandler = (filterValue: FilterValueType) => {
         props.changeFilter(props.id, filterValue)
     }
 
-    //todolist handlers
     const deleteTodolistHandler = () => props.deleteTodolist(props.id)
 
     return (
@@ -67,16 +45,9 @@ export const Todolist = (props: PropsType) => {
                 {props.title}
                 <button onClick={deleteTodolistHandler}>x</button>
             </h3>
-            <div>
-                <input
-                    onChange={onChangeHandler}
-                    onKeyPress={onEnterPressHandlerForAddTask}
-                    value={newTitle}
-                    type="text"
-                />
-                {error && <span>{error}</span>}
-                <button onClick={onClickHandlerForAddTask}>+</button>
-            </div>
+            <AddItemForm
+                callback={callbackForAddTask}
+            />
             <ul>
                 {mappedTasks}
             </ul>
@@ -88,3 +59,4 @@ export const Todolist = (props: PropsType) => {
         </div>
     )
 }
+
