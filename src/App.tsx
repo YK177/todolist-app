@@ -9,15 +9,15 @@ import {
     changeTasksStatusAC,
     changeTaskTitleAC,
     deleteTaskAC,
-    TasksReducer
-} from './reducers/TasksReducer';
+    tasksReducer
+} from './reducers/tasksReducer';
 import {
     addTodolistAC,
     changeFilterAC,
     changeTodolistTitleAC,
     deleteTodolistAC,
-    TodolistReducer
-} from './reducers/TodolistReducer';
+    todolistReducer
+} from './reducers/todolistReducer';
 
 export type TaskType = {
     id: string,
@@ -39,11 +39,11 @@ export const App = () => {
     const todolistID_2 = v1()
 
     //initial state
-    const [todolists, todolistDispatch] = useReducer(TodolistReducer, [
+    const [todolists, todolistDispatch] = useReducer(todolistReducer, [
         {id: todolistID_1, title: 'What to learn', filter: 'all'},
         {id: todolistID_2, title: 'What to buy', filter: 'all'}
     ])
-    const [tasks, taskDispatch] = useReducer(TasksReducer, {
+    const [tasks, taskDispatch] = useReducer(tasksReducer, {
         [todolistID_1]: [
             {id: v1(), title: 'HTML', isDone: true},
             {id: v1(), title: 'CSS', isDone: true},
@@ -79,7 +79,7 @@ export const App = () => {
     }
     const addTodolist = (newTitle: string) => {
         const newTodolistID = v1();
-        todolistDispatch(addTodolistAC(newTodolistID, newTitle, 'all'))
+        todolistDispatch(addTodolistAC(newTodolistID, newTitle))
         taskDispatch(addTasksForNewTodolistAC(newTodolistID))
     }
     const changeTodolistTitle = (todolistID: string, newTitle: string) => {
