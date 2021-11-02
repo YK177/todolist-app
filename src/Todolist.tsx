@@ -1,6 +1,7 @@
 import React, {ChangeEvent} from 'react';
 import {FilterValueType, TaskType} from './App';
 import {AddItemForm} from './AddItemForm';
+import {EditableSpan} from './EditableSpan';
 
 type TodolistPropsType = {
     id: string
@@ -9,8 +10,10 @@ type TodolistPropsType = {
     deleteTask: (todolistID: string, taskID: string) => void
     addTask: (todolistID: string, newTitle: string) => void
     changeTasksStatus: (todolistID: string, taskID: string, isDone: boolean) => void
+    changeTaskTitle: (taskID: string, newTitle: string, todolistID: string) => void
     changeFilter: (todolistID: string, filterValue: FilterValueType) => void
     deleteTodolist: (todolistID: string) => void
+    changeTodolistTitle: (todolistID: string, newTitle: string) => void
 }
 
 export const Todolist = (props: TodolistPropsType) => {
@@ -20,10 +23,13 @@ export const Todolist = (props: TodolistPropsType) => {
         const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
             props.changeTasksStatus(props.id, task.id, e.currentTarget.checked)
         }
+        const onTitleChangeHandler = (newValue: string) => {
+            props.changeTaskTitle(task.id, newValue, props.id);
+        }
         return (
             <li key={task.id}>
                 <input onChange={onChangeHandler} type="checkbox" checked={task.isDone}/>
-                <span>{task.title}</span>
+                <EditableSpan value={task.title} onChange={onTitleChangeHandler}/>
                 <button onClick={onClickHandler}>x</button>
             </li>
         )
@@ -39,10 +45,14 @@ export const Todolist = (props: TodolistPropsType) => {
 
     const deleteTodolistHandler = () => props.deleteTodolist(props.id)
 
+    const changeTodolistTitle = (title: string) => {
+        props.changeTodolistTitle(props.id, title);
+    }
+
     return (
         <div className="App">
             <h3>
-                {props.title}
+                <EditableSpan value={props.title} onChange={changeTodolistTitle}/>
                 <button onClick={deleteTodolistHandler}>x</button>
             </h3>
             <AddItemForm

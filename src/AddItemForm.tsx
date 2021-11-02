@@ -14,7 +14,9 @@ export const AddItemForm = (props: AddItemFormPropsType) => {
     }
 
     const addItem = () => {
-        newTitle === '' ? setError('Field is required!') : props.callback(newTitle)
+        newTitle === ''
+            ? setError('Field is required!')
+            : props.callback(newTitle)
         setNewTitle('')
     }
 
