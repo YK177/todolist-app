@@ -17,7 +17,6 @@ type TodolistPropsType = {
 }
 
 export const Todolist = (props: TodolistPropsType) => {
-
     const mappedTasks = props.tasks.map(task => {
         const onClickHandler = () => props.deleteTask(props.id, task.id)
         const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -38,19 +37,16 @@ export const Todolist = (props: TodolistPropsType) => {
     const callbackForAddTask = (newTitle: string) => {
         props.addTask(props.id, newTitle)
     }
-
     const changeFilterHandler = (filterValue: FilterValueType) => {
         props.changeFilter(props.id, filterValue)
     }
-
     const deleteTodolistHandler = () => props.deleteTodolist(props.id)
-
     const changeTodolistTitle = (title: string) => {
         props.changeTodolistTitle(props.id, title);
     }
 
     return (
-        <div className="App">
+        <>
             <h3>
                 <EditableSpan value={props.title} onChange={changeTodolistTitle}/>
                 <button onClick={deleteTodolistHandler}>x</button>
@@ -66,7 +62,6 @@ export const Todolist = (props: TodolistPropsType) => {
                 <button onClick={() => changeFilterHandler('active')}>Active</button>
                 <button onClick={() => changeFilterHandler('completed')}>Completed</button>
             </div>
-        </div>
+        </>
     )
 }
-

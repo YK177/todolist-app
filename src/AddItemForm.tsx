@@ -12,14 +12,12 @@ export const AddItemForm = (props: AddItemFormPropsType) => {
         setNewTitle(e.currentTarget.value)
         setError('')
     }
-
     const addItem = () => {
         newTitle === ''
             ? setError('Field is required!')
             : props.callback(newTitle)
         setNewTitle('')
     }
-
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') addItem()
     }
