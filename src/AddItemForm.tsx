@@ -1,37 +1,51 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import {IconButton, TextField} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 type AddItemFormPropsType = {
     callback: (newTitle: string) => void
 }
 
-export const AddItemForm = (props: AddItemFormPropsType) => {
-    const [newTitle, setNewTitle] = useState('')
-    const [error, setError] = useState('')
+export const AddItemForm: React.FC<AddItemFormPropsType> = (props) => {
+    const [newTitle, setNewTitle] = useState<string>('')
+    const [error, setError] = useState<boolean>(false)
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setNewTitle(e.currentTarget.value)
-        setError('')
+        setError(false)
     }
-    const addItem = () => {
-        newTitle === ''
-            ? setError('Field is required!')
-            : props.callback(newTitle)
-        setNewTitle('')
+
+    const addItemHandler = () => {
+        if (newTitle.trim() === '') {
+            setError(true)
+        } else {
+            props.callback(newTitle.trim())
+            setNewTitle('')
+        }
     }
+
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') addItem()
+        if (e.key === 'Enter') {
+            addItemHandler()
+        }
     }
 
     return (
         <div>
-            <input
+            <TextField
+                size="small"
+                variant="outlined"
+                type="text"
+                label={error && 'Error'}
+                value={newTitle}
                 onChange={onChangeHandler}
                 onKeyPress={onKeyPressHandler}
-                value={newTitle}
-                type="text"
+                error={error}
+                helperText={error && 'Incorrect entry!'}
             />
-            {error && <span>{error}</span>}
-            <button onClick={addItem}>+</button>
+            <IconButton onClick={addItemHandler}>
+                <AddIcon/>
+            </IconButton>
         </div>
     )
 }

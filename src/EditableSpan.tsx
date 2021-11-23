@@ -1,36 +1,60 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 
 type EditableSpanPropsType = {
-    value: string
-    onChange: (newValue: string) => void
+    title: string
+    callback: (newTitle: string) => void
 }
+export const EditableSpan: React.FC<EditableSpanPropsType> = (props) => {
 
-export function EditableSpan(props: EditableSpanPropsType) {
-    let [editMode, setEditMode] = useState(false);
-    let [title, setTitle] = useState(props.value);
+    const {title, callback} = props
 
-    const activateEditMode = () => {
-        setEditMode(true);
-        setTitle(props.value);
+    const [editMode, setEditMode] = useState<boolean>(false)
+    const [value, setValue] = useState<string>(title)
+    const [error, setError] = useState<boolean>(false)
+
+    const onDoubleClickHandler = () => {
+        setEditMode(true)
     }
-    const activateViewMode = () => {
-        setEditMode(false);
-        props.onChange(title);
+
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setValue(e.currentTarget.value)
+        setError(false)
     }
-    const changeTitle = (e: ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.currentTarget.value)
+
+    const addNewTitle = () => {
+        if (value.trim() === '') {
+            setError(true)
+        } else {
+            callback(value.trim())
+            setEditMode(false)
+        }
     }
+
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        e.key === 'Enter' && activateViewMode()
+        if (e.key === 'Enter') {
+            addNewTitle()
+        }
     }
 
-    return editMode
-        ? <input
-            value={title}
-            onChange={changeTitle}
-            autoFocus
-            onBlur={activateViewMode}
-            onKeyPress={onKeyPressHandler}
-        />
-        : <span onDoubleClick={activateEditMode}>{props.value}</span>
+    return (
+        <>
+            {
+                editMode
+                    ? (
+                        <div>
+                            <input autoFocus
+                                   type={'text'}
+                                   value={value}
+                                   onChange={onChangeHandler}
+                                   onBlur={addNewTitle}
+                                   onKeyPress={onKeyPressHandler}
+                            />
+                            {error && <span>Field is required!</span>}
+                        </div>
+                    ) : (
+                        <span onDoubleClick={onDoubleClickHandler}>{title}</span>
+                    )
+            }
+        </>
+    )
 }
