@@ -3,9 +3,10 @@ import {TextField} from '@mui/material'
 
 type EditableSpanPropsType = {
     title: string
+    spanClassName:string
     callback: (newTitle: string) => void
 }
-export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo(({title, callback}) => {
+export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo(({title,spanClassName, callback}) => {
 
     const [editMode, setEditMode] = useState<boolean>(false)
     const [value, setValue] = useState<string>(title)
@@ -54,7 +55,7 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo(({title,
                             onKeyPress={onKeyPressHandler}
                         />
                     ) : (
-                        <span onDoubleClick={onDoubleClickHandler}>{title}</span>
+                        <span className={spanClassName} onDoubleClick={onDoubleClickHandler}>{title}</span>
                     )
             }
         </>

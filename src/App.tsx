@@ -5,7 +5,7 @@ import {AddItemForm} from './AddItemForm'
 import {AppRootStateType} from './bll/store'
 import {useDispatch, useSelector} from 'react-redux'
 import {addTodolistAC, TodolistType} from './bll/todolist-reducer'
-import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@mui/material'
+import {AppBar, Box, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@mui/material'
 import {Menu} from '@mui/icons-material'
 
 export const App = () => {
@@ -21,33 +21,33 @@ export const App = () => {
 
     return (
         <>
-            <AppBar position="static">
+            <AppBar position="static" color={'primary'}>
                 <Toolbar>
                     <IconButton
-                        size="large"
                         edge="start"
                         color="inherit"
                         aria-label="menu"
-                        sx={{mr: 2}}
                     >
                         <Menu/>
                     </IconButton>
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-                        News
+                        Todolist App
                     </Typography>
-                    <Button color="inherit">Login</Button>
+                    <Button color={'inherit'}>Login</Button>
                 </Toolbar>
             </AppBar>
-            <Container maxWidth={'lg'}>
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
+            <Container fixed>
+                <Grid container maxWidth={'325px'} style={{padding: '20px 0'}}>
+                    <Box padding={'10px'} width={'100%'} style={{backgroundColor:'#fff'}}>
                         <AddItemForm callback={addTodolist}/>
-                    </Grid>
+                    </Box>
+                </Grid>
+                <Grid container spacing={3}>
                     {
                         todolists.map(tl => {
                             return (
-                                <Grid item xs={3} key={tl.id}>
-                                    <Paper elevation={6}>
+                                <Grid minWidth={'350px'} item key={tl.id}>
+                                    <Paper elevation={6} style={{padding: '10px'}}>
                                         <Todolist todolist={tl}/>
                                     </Paper>
                                 </Grid>)

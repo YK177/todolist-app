@@ -5,9 +5,9 @@ import {EditableSpan} from './EditableSpan'
 import {Task} from './Task'
 import {addTaskAC, TaskType} from './bll/task-reducer'
 import {changeFilterAC, changeTodolistTitleAC, removeTodolistAC, TodolistType} from './bll/todolist-reducer'
-import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined'
-import {Button, IconButton} from '@mui/material'
+import {Button, Divider, Grid, IconButton, Stack} from '@mui/material'
 import {AppRootStateType} from './bll/store'
+import {Delete} from '@mui/icons-material'
 
 type TodolistPropsType = {
     todolist: TodolistType
@@ -57,35 +57,53 @@ export const Todolist: React.FC<TodolistPropsType> = ({todolist,}) => {
 
     return (
         <>
-            <div>
-                <EditableSpan callback={changeTodolistTitleCallback} title={todolist.title}/>
-                <IconButton onClick={removeTodolist}>
-                    <DeleteForeverOutlinedIcon/>
-                </IconButton>
-            </div>
+            <Grid container style={{padding: '10px 0'}}>
+                <Grid alignItems={'center'} item xs={10}>
+                    <EditableSpan spanClassName={'todolistTitle'}
+                                  callback={changeTodolistTitleCallback}
+                                  title={todolist.title}/>
+                </Grid>
+                <Grid item xs={2}>
+                    <IconButton onClick={removeTodolist}>
+                        <Delete color={'error'}/>
+                    </IconButton>
+                </Grid>
+            </Grid>
             <AddItemForm callback={addTaskCallback}/>
             <ul>
-                {
-                    filteredTasks.map(t => {
-                        return <Task key={t.id} todolistID={todolist.id} task={t}/>
-                    })
-                }
+                <Stack style={{padding: '10px 0'}} direction={'column'}
+                       divider={<Divider orientation={'horizontal'} flexItem/>}>
+                    {
+                        filteredTasks.map(t => {
+                            return <Task key={t.id} todolistID={todolist.id} task={t}/>
+                        })
+                    }
+                </Stack>
             </ul>
-            <div>
-                <Button
-                    variant={todolist.filter === 'all' ? 'contained' : 'outlined'}
-                    onClick={setAllTasksCallback}
-                    size={'small'}
-                > All</Button>
-                <Button
-                    variant={todolist.filter === 'active' ? 'contained' : 'outlined'}
-                    onClick={setActiveTasksCallback}
-                    size={'small'}>Active</Button>
-                <Button
-                    variant={todolist.filter === 'completed' ? 'contained' : 'outlined'}
-                    onClick={setCompletedTasksCallback}
-                    size={'small'}>Completed</Button>
-            </div>
+            <Grid container spacing={1} style={{paddingTop: '10px'}}>
+                <Grid item xs={4}>
+                    <Button
+                        color={todolist.filter === 'all' ? 'success' : 'primary'}
+                        variant={todolist.filter === 'all' ? 'contained' : 'outlined'}
+                        onClick={setAllTasksCallback}
+                        size={'small'}
+                    > All</Button>
+                </Grid>
+                <Grid item xs={4}>
+                    <Button
+                        color={todolist.filter === 'active' ? 'success' : 'primary'}
+                        variant={todolist.filter === 'active' ? 'contained' : 'outlined'}
+                        onClick={setActiveTasksCallback}
+                        size={'small'}>Active</Button>
+                </Grid>
+                <Grid item xs={4}>
+                    <Button
+                        color={todolist.filter === 'completed' ? 'success' : 'primary'}
+                        variant={todolist.filter === 'completed' ? 'contained' : 'outlined'}
+                        onClick={setCompletedTasksCallback}
+                        size={'small'}>Completed</Button>
+                </Grid>
+            </Grid>
         </>
     )
 }

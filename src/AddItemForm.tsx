@@ -1,5 +1,5 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react'
-import {IconButton, TextField} from '@mui/material'
+import {Grid, IconButton, TextField} from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 
 type AddItemFormPropsType = {
@@ -32,21 +32,27 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(({callback
     }
 
     return (
-        <div>
-            <TextField
-                size="small"
-                variant="outlined"
-                type="text"
-                label={error && 'Error'}
-                value={newTitle}
-                onChange={onChangeHandler}
-                onKeyPress={onKeyPressHandler}
-                error={error}
-                helperText={error && 'Incorrect entry!'}
-            />
-            <IconButton onClick={addItemHandler}>
-                <AddIcon/>
-            </IconButton>
-        </div>
+        <Grid container>
+            <Grid item xs={10}>
+                <TextField
+                    fullWidth
+                    size="small"
+                    variant="outlined"
+                    color={'primary'}
+                    type="text"
+                    label={error ? 'Error' : 'Title'}
+                    value={newTitle}
+                    onChange={onChangeHandler}
+                    onKeyPress={onKeyPressHandler}
+                    error={error}
+                    helperText={error && 'Incorrect entry!'}
+                />
+            </Grid>
+            <Grid item xs={2}>
+                <IconButton color={'primary'} onClick={addItemHandler}>
+                    <AddIcon/>
+                </IconButton>
+            </Grid>
+        </Grid>
     )
 })

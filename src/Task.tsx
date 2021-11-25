@@ -2,8 +2,8 @@ import React, {ChangeEvent, useCallback} from 'react'
 import {useDispatch} from 'react-redux'
 import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, TaskType} from './bll/task-reducer'
 import {EditableSpan} from './EditableSpan'
-import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined'
-import {Checkbox, IconButton} from '@mui/material'
+import {Checkbox, Grid, IconButton} from '@mui/material'
+import {Delete} from '@mui/icons-material'
 
 type TaskPropsType = {
     todolistID: string
@@ -28,12 +28,20 @@ export const Task: React.FC<TaskPropsType> = React.memo(({todolistID, task}) => 
     }, [dispatch, todolistID, task.id])
 
     return (
-        <li>
-            <Checkbox checked={task.isDone} onChange={onChangeHandler}/>
-            <EditableSpan title={task.title} callback={changeTaskTitleCallback}/>
-            <IconButton onClick={onClickHandler}>
-                <DeleteForeverOutlinedIcon/>
-            </IconButton>
+        <li style={{padding: '5px 0'}}>
+            <Grid container>
+                <Grid item xs={2}>
+                    <Checkbox color={'success'} checked={task.isDone} onChange={onChangeHandler}/>
+                </Grid>
+                <Grid item xs={8}>
+                    <EditableSpan spanClassName={'taskTitle'} title={task.title} callback={changeTaskTitleCallback}/>
+                </Grid>
+                <Grid item xs={2}>
+                    <IconButton onClick={onClickHandler}>
+                        <Delete color={'error'}/>
+                    </IconButton>
+                </Grid>
+            </Grid>
         </li>
     )
 })
