@@ -1,5 +1,5 @@
-import {v1} from 'uuid';
-import {AddTodolistActionType, RemoveTodolistActionType, todolistID_1, todolistID_2} from './todolist-reducer';
+import {v1} from 'uuid'
+import {AddTodolistActionType, RemoveTodolistActionType, todolistID_1, todolistID_2} from './todolist-reducer'
 
 export type TaskType = {
     id: string

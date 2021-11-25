@@ -1,12 +1,13 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-import {IconButton, TextField} from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import React, {ChangeEvent, KeyboardEvent, useState} from 'react'
+import {IconButton, TextField} from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
 
 type AddItemFormPropsType = {
     callback: (newTitle: string) => void
 }
 
-export const AddItemForm: React.FC<AddItemFormPropsType> = (props) => {
+export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(({callback}) => {
+
     const [newTitle, setNewTitle] = useState<string>('')
     const [error, setError] = useState<boolean>(false)
 
@@ -19,7 +20,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = (props) => {
         if (newTitle.trim() === '') {
             setError(true)
         } else {
-            props.callback(newTitle.trim())
+            callback(newTitle.trim())
             setNewTitle('')
         }
     }
@@ -48,4 +49,4 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = (props) => {
             </IconButton>
         </div>
     )
-}
+})

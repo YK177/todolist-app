@@ -1,12 +1,11 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, useState} from 'react'
+import {TextField} from '@mui/material'
 
 type EditableSpanPropsType = {
     title: string
     callback: (newTitle: string) => void
 }
-export const EditableSpan: React.FC<EditableSpanPropsType> = (props) => {
-
-    const {title, callback} = props
+export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo(({title, callback}) => {
 
     const [editMode, setEditMode] = useState<boolean>(false)
     const [value, setValue] = useState<string>(title)
@@ -41,20 +40,23 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = (props) => {
             {
                 editMode
                     ? (
-                        <div>
-                            <input autoFocus
-                                   type={'text'}
-                                   value={value}
-                                   onChange={onChangeHandler}
-                                   onBlur={addNewTitle}
-                                   onKeyPress={onKeyPressHandler}
-                            />
-                            {error && <span>Field is required!</span>}
-                        </div>
+                        <TextField
+                            size="small"
+                            variant="outlined"
+                            label={error && 'Error'}
+                            error={error}
+                            helperText={error && 'Incorrect entry!'}
+                            autoFocus
+                            type={'text'}
+                            value={value}
+                            onChange={onChangeHandler}
+                            onBlur={addNewTitle}
+                            onKeyPress={onKeyPressHandler}
+                        />
                     ) : (
                         <span onDoubleClick={onDoubleClickHandler}>{title}</span>
                     )
             }
         </>
     )
-}
+})
