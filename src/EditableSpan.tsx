@@ -1,40 +1,44 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react'
+import React, {ChangeEvent, FC, KeyboardEvent, memo, useCallback, useState} from 'react'
 import {TextField} from '@mui/material'
 
 type EditableSpanPropsType = {
     title: string
-    spanClassName:string
-    callback: (newTitle: string) => void
+    spanClassName: string
+    onTitleChange: (newTitle: string) => void
 }
-export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo(({title,spanClassName, callback}) => {
+export const EditableSpan: FC<EditableSpanPropsType> = memo(({
+                                                                             title,
+                                                                             spanClassName,
+                                                                             onTitleChange
+                                                                         }) => {
 
     const [editMode, setEditMode] = useState<boolean>(false)
     const [value, setValue] = useState<string>(title)
     const [error, setError] = useState<boolean>(false)
 
-    const onDoubleClickHandler = () => {
+    const handleDoubleClick = () => {
         setEditMode(true)
     }
 
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleValueChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setValue(e.currentTarget.value)
         setError(false)
-    }
+    }, [setValue, setError])
 
-    const addNewTitle = () => {
+    const handleNewTitleAdd = useCallback(() => {
         if (value.trim() === '') {
             setError(true)
         } else {
-            callback(value.trim())
+            onTitleChange(value.trim())
             setEditMode(false)
         }
-    }
+    }, [value, setError, onTitleChange, setEditMode])
 
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyPress = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            addNewTitle()
+            handleNewTitleAdd()
         }
-    }
+    }, [handleNewTitleAdd])
 
     return (
         <>
@@ -50,12 +54,16 @@ export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo(({title,
                             autoFocus
                             type={'text'}
                             value={value}
-                            onChange={onChangeHandler}
-                            onBlur={addNewTitle}
-                            onKeyPress={onKeyPressHandler}
+                            onChange={handleValueChange}
+                            onBlur={handleNewTitleAdd}
+                            onKeyPress={handleKeyPress}
                         />
                     ) : (
-                        <span className={spanClassName} onDoubleClick={onDoubleClickHandler}>{title}</span>
+                        <span className={spanClassName}
+                              onDoubleClick={handleDoubleClick}
+                        >
+                            {title}
+                        </span>
                     )
             }
         </>

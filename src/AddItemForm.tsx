@@ -1,33 +1,33 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react'
+import React, {ChangeEvent, FC, KeyboardEvent, memo, useState} from 'react'
 import {Grid, IconButton, TextField} from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 
 type AddItemFormPropsType = {
-    callback: (newTitle: string) => void
+    onAddItem: (newTitle: string) => void
 }
 
-export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(({callback}) => {
+export const AddItemForm: FC<AddItemFormPropsType> = memo(({onAddItem}) => {
 
     const [newTitle, setNewTitle] = useState<string>('')
     const [error, setError] = useState<boolean>(false)
 
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleValueChange = (e: ChangeEvent<HTMLInputElement>) => {
         setNewTitle(e.currentTarget.value)
         setError(false)
     }
 
-    const addItemHandler = () => {
+    const handleClick = () => {
         if (newTitle.trim() === '') {
             setError(true)
         } else {
-            callback(newTitle.trim())
+            onAddItem(newTitle.trim())
             setNewTitle('')
         }
     }
 
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            addItemHandler()
+            handleClick()
         }
     }
 
@@ -42,14 +42,14 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(({callback
                     type="text"
                     label={error ? 'Error' : 'Title'}
                     value={newTitle}
-                    onChange={onChangeHandler}
-                    onKeyPress={onKeyPressHandler}
+                    onChange={handleValueChange}
+                    onKeyPress={handleKeyPress}
                     error={error}
                     helperText={error && 'Incorrect entry!'}
                 />
             </Grid>
             <Grid item xs={2}>
-                <IconButton color={'primary'} onClick={addItemHandler}>
+                <IconButton color={'primary'} onClick={handleClick}>
                     <AddIcon/>
                 </IconButton>
             </Grid>

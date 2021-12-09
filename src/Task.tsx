@@ -1,6 +1,6 @@
-import React, {ChangeEvent, useCallback} from 'react'
+import React, {ChangeEvent, FC, memo, useCallback} from 'react'
 import {useDispatch} from 'react-redux'
-import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, TaskType} from './bll/task-reducer'
+import {changeTaskStatus, changeTaskTitle, removeTask, TaskType} from './bll/task-reducer'
 import {EditableSpan} from './EditableSpan'
 import {Checkbox, Grid, IconButton} from '@mui/material'
 import {Delete} from '@mui/icons-material'
@@ -10,34 +10,40 @@ type TaskPropsType = {
     task: TaskType
 }
 
-export const Task: React.FC<TaskPropsType> = React.memo(({todolistID, task}) => {
+export const Task: FC<TaskPropsType> = memo(({todolistID, task}) => {
 
     const dispatch = useDispatch()
 
-    const onClickHandler = () => {
-        dispatch(removeTaskAC(todolistID, task.id))
-    }
+    const handleTaskRemove = useCallback(() => {
+        dispatch(removeTask(todolistID, task.id))
+    }, [dispatch, todolistID, task.id])
 
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleTaskStatusChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const newTaskStatus = e.currentTarget.checked
-        dispatch(changeTaskStatusAC(todolistID, task.id, newTaskStatus))
-    }
+        dispatch(changeTaskStatus(todolistID, task.id, newTaskStatus))
+    }, [dispatch, todolistID, task.id])
 
     const changeTaskTitleCallback = useCallback((newTitle: string) => {
-        dispatch(changeTaskTitleAC(todolistID, task.id, newTitle))
+        dispatch(changeTaskTitle(todolistID, task.id, newTitle))
     }, [dispatch, todolistID, task.id])
 
     return (
         <li style={{padding: '5px 0'}}>
             <Grid container>
                 <Grid item xs={2}>
-                    <Checkbox color={'success'} checked={task.isDone} onChange={onChangeHandler}/>
+                    <Checkbox color={'success'}
+                              checked={task.isDone}
+                              onChange={handleTaskStatusChange}
+                    />
                 </Grid>
                 <Grid item xs={8}>
-                    <EditableSpan spanClassName={'taskTitle'} title={task.title} callback={changeTaskTitleCallback}/>
+                    <EditableSpan spanClassName={'taskTitle'}
+                                  title={task.title}
+                                  onTitleChange={changeTaskTitleCallback}
+                    />
                 </Grid>
                 <Grid item xs={2}>
-                    <IconButton onClick={onClickHandler}>
+                    <IconButton onClick={handleTaskRemove}>
                         <Delete color={'error'}/>
                     </IconButton>
                 </Grid>

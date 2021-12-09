@@ -4,7 +4,7 @@ import {Todolist} from './Todolist'
 import {AddItemForm} from './AddItemForm'
 import {AppRootStateType} from './bll/store'
 import {useDispatch, useSelector} from 'react-redux'
-import {addTodolistAC, TodolistType} from './bll/todolist-reducer'
+import {addTodolist, TodolistType} from './bll/todolist-reducer'
 import {AppBar, Box, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@mui/material'
 import {Menu} from '@mui/icons-material'
 
@@ -15,8 +15,8 @@ export const App = () => {
     //Todolists
     const todolists = useSelector<AppRootStateType, TodolistType[]>(state => state.todolists)
 
-    const addTodolist = (title: string) => {
-        dispatch(addTodolistAC(title))
+    const handleTodolistAdd = (title: string) => {
+        dispatch(addTodolist(title))
     }
 
     return (
@@ -39,7 +39,7 @@ export const App = () => {
             <Container fixed>
                 <Grid container maxWidth={'325px'} style={{padding: '20px 0'}}>
                     <Box padding={'10px'} width={'100%'} style={{backgroundColor:'#fff'}}>
-                        <AddItemForm callback={addTodolist}/>
+                        <AddItemForm onAddItem={handleTodolistAdd}/>
                     </Box>
                 </Grid>
                 <Grid container spacing={3}>
