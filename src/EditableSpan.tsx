@@ -6,11 +6,12 @@ type EditableSpanPropsType = {
     spanClassName: string
     onTitleChange: (newTitle: string) => void
 }
-export const EditableSpan: FC<EditableSpanPropsType> = memo(({
-                                                                             title,
-                                                                             spanClassName,
-                                                                             onTitleChange
-                                                                         }) => {
+export const EditableSpan: FC<EditableSpanPropsType> = memo((
+    {
+        title,
+        spanClassName,
+        onTitleChange
+    }) => {
 
     const [editMode, setEditMode] = useState<boolean>(false)
     const [value, setValue] = useState<string>(title)

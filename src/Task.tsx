@@ -10,7 +10,11 @@ type TaskPropsType = {
     task: TaskType
 }
 
-export const Task: FC<TaskPropsType> = memo(({todolistID, task}) => {
+export const Task: FC<TaskPropsType> = memo((
+    {
+        todolistID,
+        task
+    }) => {
 
     const dispatch = useDispatch()
 
