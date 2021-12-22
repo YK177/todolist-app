@@ -8,7 +8,7 @@ export const axiosInstance = axios.create({
     },
 })
 
-export type CommonResponseType<T = {}> = {
+export type ResponseType<T = {}> = {
     resultCode: number
     messages: string[]
     fieldsError: string[]

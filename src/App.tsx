@@ -1,22 +1,26 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import './App.css'
 import {Todolist} from './Todolist'
 import {AddItemForm} from './AddItemForm'
 import {AppRootStateType} from './bll/store'
 import {useDispatch, useSelector} from 'react-redux'
-import {addTodolist, TodolistType} from './bll/todolist-reducer'
+import {createTodolist, fetchTodolists, TodolistDomainType} from './bll/todolist-reducer'
 import {AppBar, Box, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@mui/material'
 import {Menu} from '@mui/icons-material'
+
 
 export const App = () => {
 
     const dispatch = useDispatch()
 
-    //Todolists
-    const todolists = useSelector<AppRootStateType, TodolistType[]>(state => state.todolists)
+    const todolists = useSelector<AppRootStateType, TodolistDomainType[]>(state => state.todolists)
+
+    useEffect(() => {
+        dispatch(fetchTodolists())
+    }, [dispatch])
 
     const handleTodolistAdd = (title: string) => {
-        dispatch(addTodolist(title))
+        dispatch(createTodolist(title))
     }
 
     return (
@@ -38,7 +42,7 @@ export const App = () => {
             </AppBar>
             <Container fixed>
                 <Grid container maxWidth={'325px'} style={{padding: '20px 0'}}>
-                    <Box padding={'10px'} width={'100%'} style={{backgroundColor:'#fff'}}>
+                    <Box padding={'10px'} width={'100%'} style={{backgroundColor: '#fff'}}>
                         <AddItemForm onAddItem={handleTodolistAdd}/>
                     </Box>
                 </Grid>

@@ -1,21 +1,22 @@
-import {axiosInstance, CommonResponseType} from './api-config'
+import {AxiosResponse} from 'axios'
+import {axiosInstance, ResponseType} from './api-config'
 
 export const todolistApi = {
-    getTodos() {
-        return axiosInstance.get<TodoType[]>('todo-lists',)
+    getTodolists() {
+        return axiosInstance.get<TodolistType[]>('todo-lists',)
     },
-    createTodo(title: string) {
-        return axiosInstance.post<CommonResponseType<{ item: TodoType }>>('todo-lists', {title})
+    createTodolist(title: string) {
+        return axiosInstance.post<{ title: string }, AxiosResponse<ResponseType<{ item: TodolistType }>>>('todo-lists', {title})
     },
-    deleteTodo(todolistId: string) {
-        return axiosInstance.delete<CommonResponseType>(`todo-lists/${todolistId}`)
+    deleteTodolist(todolistId: string) {
+        return axiosInstance.delete<ResponseType>(`todo-lists/${todolistId}`)
     },
-    updateTodoTitle(todolistId: string, title: string) {
-        return axiosInstance.put<CommonResponseType>(`todo-lists/${todolistId}`, {title})
+    updateTodolistTitle(todolistId: string, title: string) {
+        return axiosInstance.put<{ title: string }, AxiosResponse<ResponseType>>(`todo-lists/${todolistId}`, {title})
     },
 }
 
-type TodoType = {
+export type TodolistType = {
     id: string
     title: string
     addedDate: string

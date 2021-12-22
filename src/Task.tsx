@@ -1,9 +1,10 @@
 import React, {ChangeEvent, FC, memo, useCallback} from 'react'
 import {useDispatch} from 'react-redux'
-import {changeTaskStatus, changeTaskTitle, removeTask, TaskType} from './bll/task-reducer'
+import {deleteTask, updateTaskStatus, updateTaskTitle} from './bll/task-reducer'
 import {EditableSpan} from './EditableSpan'
 import {Checkbox, Grid, IconButton} from '@mui/material'
 import {Delete} from '@mui/icons-material'
+import {TaskStatuses, TaskType} from './api/task-api'
 
 type TaskPropsType = {
     todolistID: string
@@ -19,16 +20,16 @@ export const Task: FC<TaskPropsType> = memo((
     const dispatch = useDispatch()
 
     const handleTaskRemove = useCallback(() => {
-        dispatch(removeTask(todolistID, task.id))
+        dispatch(deleteTask(todolistID, task.id))
     }, [dispatch, todolistID, task.id])
 
     const handleTaskStatusChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const newTaskStatus = e.currentTarget.checked
-        dispatch(changeTaskStatus(todolistID, task.id, newTaskStatus))
+        dispatch(updateTaskStatus(todolistID, task.id, newTaskStatus ? TaskStatuses.Completed : TaskStatuses.New))
     }, [dispatch, todolistID, task.id])
 
     const changeTaskTitleCallback = useCallback((newTitle: string) => {
-        dispatch(changeTaskTitle(todolistID, task.id, newTitle))
+        dispatch(updateTaskTitle(todolistID, task.id, newTitle))
     }, [dispatch, todolistID, task.id])
 
     return (
@@ -36,7 +37,7 @@ export const Task: FC<TaskPropsType> = memo((
             <Grid container>
                 <Grid item xs={2}>
                     <Checkbox color={'success'}
-                              checked={task.isDone}
+                              checked={task.status === TaskStatuses.Completed}
                               onChange={handleTaskStatusChange}
                     />
                 </Grid>
