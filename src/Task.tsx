@@ -1,6 +1,6 @@
 import React, {ChangeEvent, FC, memo, useCallback} from 'react'
 import {useDispatch} from 'react-redux'
-import {deleteTask, updateTaskStatus, updateTaskTitle} from './bll/task-reducer'
+import {deleteTask, updateTask} from './bll/task-reducer'
 import {EditableSpan} from './EditableSpan'
 import {Checkbox, Grid, IconButton} from '@mui/material'
 import {Delete} from '@mui/icons-material'
@@ -24,12 +24,12 @@ export const Task: FC<TaskPropsType> = memo((
     }, [dispatch, todolistID, task.id])
 
     const handleTaskStatusChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        const newTaskStatus = e.currentTarget.checked
-        dispatch(updateTaskStatus(todolistID, task.id, newTaskStatus ? TaskStatuses.Completed : TaskStatuses.New))
+        const status: TaskStatuses = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New
+        dispatch(updateTask(todolistID, task.id, {status}))
     }, [dispatch, todolistID, task.id])
 
-    const changeTaskTitleCallback = useCallback((newTitle: string) => {
-        dispatch(updateTaskTitle(todolistID, task.id, newTitle))
+    const changeTaskTitleCallback = useCallback((title: string) => {
+        dispatch(updateTask(todolistID, task.id, {title}))
     }, [dispatch, todolistID, task.id])
 
     return (
