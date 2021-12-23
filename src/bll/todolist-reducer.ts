@@ -1,9 +1,9 @@
 import {todolistApi, TodolistType} from '../api/todolist-api'
-import {Dispatch} from 'redux'
+import {AppThunkType} from './store'
 
 const initialState = [] as TodolistDomainType[]
 
-export const todolistReducer = (state: TodolistDomainType[] = initialState, action: ActionsType): TodolistDomainType[] => {
+export const todolistReducer = (state: TodolistDomainType[] = initialState, action: TodolistsActionsType): TodolistDomainType[] => {
     switch (action.type) {
         case 'SET-TODOLISTS':
             return action.todolists.map(tl => ({...tl, filter: 'all'}))
@@ -40,29 +40,21 @@ export const changeTodolistTitle = (todolistId: string, title: string) => ({
 } as const)
 
 // THUNK
-export const fetchTodolists = () => (dispatch: Dispatch) => {
-    todolistApi.getTodolists()
-        .then(response => {
-            dispatch(setTodolists(response.data))
-        })
+export const fetchTodolists = (): AppThunkType => async dispatch => {
+    const response = await todolistApi.getTodolists()
+    dispatch(setTodolists(response.data))
 }
-export const deleteTodolist = (todolistID: string) => (dispatch: Dispatch): void => {
-    todolistApi.deleteTodolist(todolistID)
-        .then(() => {
-            dispatch(removeTodolist(todolistID))
-        })
+export const deleteTodolist = (todolistID: string): AppThunkType => async dispatch => {
+    await todolistApi.deleteTodolist(todolistID)
+    dispatch(removeTodolist(todolistID))
 }
-export const createTodolist = (title: string) => (dispatch: Dispatch): void => {
-    todolistApi.createTodolist(title)
-        .then(response => {
-            dispatch(addTodolist(response.data.data.item))
-        })
+export const createTodolist = (title: string): AppThunkType => async dispatch => {
+    const response = await todolistApi.createTodolist(title)
+    dispatch(addTodolist(response.data.data.item))
 }
-export const updateTodolistTitle = (todolistId: string, title: string) => (dispatch: Dispatch) => {
-    todolistApi.updateTodolistTitle(todolistId, title)
-        .then(() => {
-            dispatch(changeTodolistTitle(todolistId, title))
-        })
+export const updateTodolistTitle = (todolistId: string, title: string): AppThunkType => async dispatch => {
+    await todolistApi.updateTodolistTitle(todolistId, title)
+    dispatch(changeTodolistTitle(todolistId, title))
 }
 
 // TYPES
@@ -75,7 +67,7 @@ export type SetTodolistsActionType = ReturnType<typeof setTodolists>
 export type AddTodolistActionType = ReturnType<typeof addTodolist>
 export type RemoveTodolistActionType = ReturnType<typeof removeTodolist>
 
-type ActionsType =
+export type TodolistsActionsType =
     | SetTodolistsActionType
     | AddTodolistActionType
     | RemoveTodolistActionType
